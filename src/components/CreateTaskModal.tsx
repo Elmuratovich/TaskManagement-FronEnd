@@ -63,7 +63,7 @@ const CreateTaskModal = (props: Props) => {
 
     const body = (
         <div style={modalStyle} className={classes.paper}>
-            <h2 id="simple-modal-title">Text in a modal</h2>
+            <h2 id="simple-modal-title">Create New Task</h2>
             <p id="simple-modal-description">
                 Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
             </p>

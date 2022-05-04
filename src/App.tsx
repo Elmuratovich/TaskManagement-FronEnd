@@ -9,12 +9,15 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CreateTaskModal from './components/CreateTaskModal';
+import EditTaskModal from './components/EditTaskModal';
 
 
 function App() {
   const [tasks, setTasks] = useState<TaskDTO[]>([]);
   //const [createModalOpen, setCreateModalOpen] = useState(false);
   const [createTaskModalOpen, setCreateTaskModalOpen] = useState(false);
+  const [updateTaskModalOpen, setUpdateTaskModalOpen] = useState(false);
+  const [taskBeingEdited, setTaskBeingEdited] = useState<undefined | TaskDTO>(undefined)
 
   const addTask = (task: TaskDTO) => {
     setTasks([...tasks, task]);
@@ -22,6 +25,15 @@ function App() {
 
   const deleteTask = (taskId: number) => {
     setTasks(tasks.filter((x) => x.id !== taskId));
+  };
+
+  const updateTask = (task: TaskDTO) => {
+    setTasks(
+      tasks.map((x) => {
+        if (x.id === task.id) return task;
+        return x;
+      })
+    );
   };
 
   useEffect(() => {
@@ -37,6 +49,12 @@ function App() {
         open={createTaskModalOpen}
         handleClose={() => setCreateTaskModalOpen(false)}
         onTaskCreated={addTask}
+      />
+      <EditTaskModal
+        data={taskBeingEdited}
+        open={updateTaskModalOpen}
+        handleClose={() => setUpdateTaskModalOpen(false)}
+        onTaskUpdate={updateTask}
       />
       <AppBar position="static">
         <Toolbar>
@@ -57,7 +75,14 @@ function App() {
         {tasks.map((task) => {
           return (
             <Grid item xs={3}>
-              <Task data={task} onTaskDelete={deleteTask} />
+              <Task
+                data={task}
+                onTaskDelete={deleteTask}
+                onTaskUpdate={(task: TaskDTO) => {
+                  setTaskBeingEdited(task);
+                  setUpdateTaskModalOpen(true);
+                }}
+              />
             </Grid>
           );
         })}

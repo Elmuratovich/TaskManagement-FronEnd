@@ -1,5 +1,6 @@
 import { CreateTaskDTO } from './dto/create-task.dto';
 import { TaskDTO } from './dto/task.dto';
+import { UpdateTaskDTO } from './dto/update-task.dto';
 export class TaskApi {
     public static async getAll(): Promise<TaskDTO[]> {
         const resp = await fetch("http://localhost:3000/tasks", {
@@ -29,5 +30,19 @@ export class TaskApi {
         const resp = await fetch(`http://localhost:3000/tasks/${taskId}`, {
             method: 'DELETE',
         })
+    }
+
+    public static async updateOne(taskId: number,updateRequest: UpdateTaskDTO) {
+        const resp = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateRequest)
+        })
+
+        const data = await resp.json()
+
+        return data;
     }
 }
